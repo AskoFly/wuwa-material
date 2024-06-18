@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form>
+        <label for="startLevel" style="font-size: 20px; font-weight: bold;">Starting level : </label>
+        <input class="reset-to-zero" id="startLevel" type="number" min="0" step="1" value="1">
+        <br>
+        <label for="endLevel" style="font-size: 20px; font-weight: bold;">Ending level : </label>
+        <input class="reset-to-zero" id="endLevel" type="number" min="0" step="1" value="6">
+        <br>
+        <br>
+        <label for="mat1Green" style="font-size: 20px; font-weight: bold;">Mat 1 : </label>
+        <br>
+        <br>
+        <label for="mat1Green">Green : </label>
+        <input class="reset-to-zero" id="mat1Green" type="number" min="0" step="1" value="0">
+        <br>
+        <label for="mat1Blue">Blue : </label>
+        <input class="reset-to-zero" id="mat1Blue" type="number" min="0" step="1" value="0">
+        <br>
+        <label for="mat1Purple">Purple : </label>
+        <input class="reset-to-zero" id="mat1Purple" type="number" min="0" step="1" value="0">
+        <br>
+        <br>
+        <label for="mat2Green" style="font-size: 20px; font-weight: bold;">Mat 2 : </label>
+        <br>
+        <br>
+        <label for="mat2Green">Green : </label>
+        <input class="reset-to-zero" id="mat2Green" type="number" min="0" step="1" value="0">
+        <br>
+        <label for="mat2Blue">Blue : </label>
+        <input class="reset-to-zero" id="mat2Blue" type="number" min="0" step="1" value="0">
+        <br>
+        <label for="mat2Purple">Purple : </label>
+        <input class="reset-to-zero" id="mat2Purple" type="number" min="0" step="1" value="0">
+        <br>
+        <br>
+        <label for="mat3Green" style="font-size: 20px; font-weight: bold;">Mat 3 : </label>
+        <br>
+        <br>
+        <label for="mat3">Quantity : </label>
+        <input class="reset-to-zero" id="mat3" type="number" min="0" step="1" value="0">
+        <br>
+        <input type="button" value="GO" onclick="calcResult()">
+    </form>
+    <p style="font-size: 20px; font-weight: bold;" id="matResult"></p>
+    <p style="font-size: 20px; font-weight: bold;" id="matValueResult"></p>
+    <p style="font-size: 20px; font-weight: bold;" id="matDiff"></p>
+</body>
+<script>
+// Get all inputs with class 'reset-to-zero'
+const inputs = document.querySelectorAll('.reset-to-zero');
+
+// Add event listeners to each input
+inputs.forEach(input => {
+    input.addEventListener('change', function(event) {
+        const inputValue = parseInt(event.target.value); // Parse input value as integer
+
+        // Check if input value is negative
+        if (inputValue < 0) {
+            // Reset input value to 0
+            event.target.value = 0;
+        }
+    });
+});
+
+
+
+
+const Values = [1, 3, 9, 27];
+const Levels = [
+    {"mat1":{"quality" : 1, "quantity" : 2}, "mat2":{"quality" : 1, "quantity" : 2}, "mat3":{"quantity" : 0}},
+    {"mat1":{"quality" : 1, "quantity" : 3}, "mat2":{"quality" : 1, "quantity" : 3}, "mat3":{"quantity" : 0}},
+    {"mat1":{"quality" : 2, "quantity" : 2}, "mat2":{"quality" : 2, "quantity" : 2}, "mat3":{"quantity" : 0}},
+    {"mat1":{"quality" : 2, "quantity" : 3}, "mat2":{"quality" : 2, "quantity" : 3}, "mat3":{"quantity" : 0}},
+    {"mat1":{"quality" : 3, "quantity" : 3}, "mat2":{"quality" : 3, "quantity" : 2}, "mat3":{"quantity" : 0}},
+    {"mat1":{"quality" : 3, "quantity" : 5}, "mat2":{"quality" : 3, "quantity" : 3}, "mat3":{"quantity" : 1}}
+];
+
+function calcMats(levelnb, levelmaxnb=null) {
+    let sum1 = 0;
+    let sum2 = 0;
+    let sum3 = 0;
+    if (levelmaxnb === null) {
+        let level = Levels[levelnb - 1];
+        let v1 = Values[level.mat1.quality - 1];
+        let q1 = level.mat1.quantity;
+        let v2 = Values[level.mat2.quality - 1];
+        let q2 = level.mat2.quantity;
+        let v3 = level.mat3.quantity;
+        sum1 = v1 * q1;
+        sum2 = v2 * q2;
+        sum3 = v3;
+    } else {
+        for (let i = levelnb; i <= levelmaxnb; i++) {
+            let level = Levels[i - 1];
+            let v1 = Values[level.mat1.quality - 1];
+            let q1 = level.mat1.quantity;
+            let v2 = Values[level.mat2.quality - 1];
+            let q2 = level.mat2.quantity;
+            let v3 = level.mat3.quantity;
+            sum1 += v1 * q1;
+            sum2 += v2 * q2;
+            sum3 += v3;
+        }
+    }
+    return [sum1, sum2, sum3];
+}
+
+function calcValue(QList) {
+    let List = QList.map((quantity, index) => Values[index] * quantity);
+    return List.reduce((acc, curr) => acc + curr, 0);
+}
+
+const startLevelHolder = document.getElementById("startLevel");
+const endLevelHolder = document.getElementById("endLevel");
+const matResult = document.getElementById("matResult")
+const matValueResult = document.getElementById("matValueResult")
+const matDiff = document.getElementById("matDiff")
+
+const mat1GreenInput = document.getElementById('mat1Green');
+const mat1BlueInput = document.getElementById('mat1Blue');
+const mat1PurpleInput = document.getElementById('mat1Purple');
+
+const mat2GreenInput = document.getElementById('mat2Green');
+const mat2BlueInput = document.getElementById('mat2Blue');
+const mat2PurpleInput = document.getElementById('mat2Purple');
+
+const mat3Input = document.getElementById('mat3');
+
+function calcResult() {
+    const [mat1, mat2, mat3] = calcMats(startLevelHolder.value, endLevelHolder.value);
+    matResult.textContent = `Material1 value needed : ${mat1}, Material2 value needed : ${mat2}, Material3 value needed : ${mat3}`    
+    const matv1 = calcValue([mat1GreenInput.value, mat1BlueInput.value, mat1PurpleInput.value]);
+    const matv2 = calcValue([mat2GreenInput.value, mat2BlueInput.value, mat2PurpleInput.value]);
+    const matv3 = mat3Input.value
+    matValueResult.textContent = `Your material value is : Material1 = ${matv1}, Material2 = ${matv2}, Material3 = ${matv3}`
+    matDiff.textContent = `You still need ${Math.max(mat1-matv1, 0)} from Material1 , ${Math.max(mat2-matv2, 0)} from Material2 and ${Math.max(mat3-matv3, 0)} from Material3`
+}
+</script>
+</html>
