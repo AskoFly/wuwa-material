@@ -97,7 +97,7 @@ function calcMats(levelnb, levelmaxnb=null) {
         sum2 = v2 * q2;
         sum3 = v3;
     } else {
-        for (let i = levelnb; i <= levelmaxnb; i++) {
+        for (let i = levelnb; i < levelmaxnb; i++) {
             let level = Levels[i - 1];
             let v1 = Values[level.mat1.quality - 1];
             let q1 = level.mat1.quantity;
